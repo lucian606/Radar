@@ -77,12 +77,9 @@ void drawObject(int angle, int distance) {
 }
 
 void drawObjects(ArrayList<Point> objects) {
-  ArrayList<Point> filteredPoints = new ArrayList<Point>();
   for (Point p : objects) {
     drawObject(p.angle, p.distance);
     p.fade();
-    if (p.time > 0)
-      filteredPoints.add(p);
   }
   int i = 0;
   while (i < objects.size()) {
@@ -122,23 +119,18 @@ void settings() {
   smooth();
   size(window_length, window_height * 12/10);
   objects = new ArrayList<Point>();
-  //UNCOMMENT WHEN ARDUINO IS PLUGGED IN
   port = new Serial(this,"/dev/ttyUSB0",9600);
   
 }
 
-int stop = 40;
-
 void draw() {
   
-  //background(51);
   fill(0,  15);
   rect(-10, -10, window_length * 2, window_height * 3); // Set the background black
   drawRadar();
   if (last_angle >= 0) {
     drawText(last_angle, last_distance);
   }
-  //UNCOMMENT WHEN ARDUINO IS PLUGGED IN
   if(port.available() > 0) {
     String info = port.readStringUntil('\n');
     if (info != null) {
@@ -158,5 +150,4 @@ void draw() {
     }
   }
   drawObjects(objects);
-  angle = (angle + 1) % 179;
 }
